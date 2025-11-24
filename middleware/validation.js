@@ -4,7 +4,7 @@ const { body, param } = require('express-validator');
 exports.validateLead = [
   body('name')
     .notEmpty()
-    .withMessage('Lead name is required')
+    .withMessage("Invalid input: 'name' is required.")
     .isString()
     .withMessage('Lead name must be a string'),
   body('source')
@@ -12,7 +12,7 @@ exports.validateLead = [
     .withMessage('Invalid lead source'),
   body('salesAgent')
     .isMongoId()
-    .withMessage('Invalid sales agent ID'),
+    .withMessage('Invalid Sales Agent Id.'),
   body('status')
     .isIn(['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Closed'])
     .withMessage('Invalid lead status'),

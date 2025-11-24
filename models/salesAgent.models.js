@@ -10,7 +10,7 @@ const salesAgentSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Sales Agent email is required'],
     unique: true,  // Email must be unique across agents
-  },
+  }, 
   createdAt: {
     type: Date,
     default: Date.now,
