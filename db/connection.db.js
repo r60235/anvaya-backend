@@ -1,15 +1,28 @@
-const mongoose= require("mongoose");
+const mongoose = require("mongoose");
 require("dotenv").config();
-const dbURI=process.env.MONGODB;
+const dbURI = process.env.MONGODB;
+
+let cachedDb = null;
 
 const connectDB = async () => {
-   await mongoose.connect(dbURI)
-      .then(()=>{
-          console.log("Connected to DB");
-      })
-      .catch((e)=>{
-          console.log("An error occurred while connecting to db");
-      })
+  // Reuse existing connection if available
+  if (cachedDb && mongoose.connection.readyState === 1) {
+    console.log('Using cached database connection');
+    return cachedDb;
+  }
+
+  try {
+    await mongoose.connect(dbURI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    cachedDb = mongoose.connection;
+    console.log("New database connection established");
+    return cachedDb;
+  } catch (error) {
+    console.error("Database connection error:", error);
+    throw error;
+  }
 };
 
 module.exports = connectDB;
